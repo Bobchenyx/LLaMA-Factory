@@ -652,7 +652,7 @@
     "columns": {
       "prompt": "raw_content"
     },
-    "subset": "default"
+    "subset": "sample"
   },
   "wikipedia_en": {
     "hf_hub_url": "olm/olm-wikipedia-20221220",
