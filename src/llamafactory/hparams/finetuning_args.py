@@ -50,6 +50,17 @@ class FreezeArguments:
             )
         },
     )
+    freeze_trainable_layer_ids: str | None = field(
+        default=None,
+        metadata={
+            "help": (
+                "Specific layer indices to be set as trainable "
+                "for freeze (partial-parameter) fine-tuning. "
+                "Use commas to separate multiple layer indices (e.g., '1,2,3,5,6,7'). "
+                "If specified, this overrides freeze_trainable_layers."
+            )
+        },
+    )
 
 
 @dataclass
@@ -539,6 +550,10 @@ class FinetuningArguments(
 
         self.freeze_trainable_modules: list[str] = split_arg(self.freeze_trainable_modules)
         self.freeze_extra_modules: list[str] | None = split_arg(self.freeze_extra_modules)
+        if self.freeze_trainable_layer_ids is not None:
+            self.freeze_trainable_layer_ids: list[int] = [int(x.strip()) for x in self.freeze_trainable_layer_ids.split(",")]
+        else:
+            self.freeze_trainable_layer_ids: list[int] | None = None
         self.lora_alpha: int = self.lora_alpha or self.lora_rank * 2
         self.lora_target: list[str] = split_arg(self.lora_target)
         self.oft_target: list[str] = split_arg(self.oft_target)

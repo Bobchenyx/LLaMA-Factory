@@ -79,7 +79,11 @@ def _setup_freeze_tuning(
     if not num_layers:
         raise ValueError("Current model does not support freeze tuning.")
 
-    if finetuning_args.use_llama_pro:
+    if finetuning_args.freeze_trainable_layer_ids is not None:
+        # Use custom layer IDs if specified
+        trainable_layer_ids = finetuning_args.freeze_trainable_layer_ids
+        logger.info_rank0(f"Using custom trainable layer IDs: {trainable_layer_ids}")
+    elif finetuning_args.use_llama_pro:
         if num_layers % finetuning_args.freeze_trainable_layers != 0:
             raise ValueError(
                 f"`num_layers` {num_layers} should be "
